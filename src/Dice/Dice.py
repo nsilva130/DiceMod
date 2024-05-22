@@ -140,8 +140,8 @@ class DiceMath:
     _LOG_LEVEL = logging.INFO
     __log.setLevel(_LOG_LEVEL)
     
-    
-    def _checkDice(self, obj) -> Dice:
+    @staticmethod
+    def _checkDice(obj) -> Dice:
         """Internal check to verify if the argument is an instance of the Dice object
 
         Args:
@@ -155,12 +155,13 @@ class DiceMath:
         """
         if not isinstance(obj,Dice):
             message = f"dice must be an instance of the Dice class. Received value: {obj} ({type(obj)})"
-            self.__log.error(f"ValueError: {message}")
+            DiceMath.__log.error(f"ValueError: {message}")
             raise ValueError(f"{message}")
         else:
             return obj
     
-    def average(self,dice):
+    @staticmethod
+    def average(dice):
         """Calculate the average result of rolling a single Dice object
         
         If either the sides or count of the Dice object are equal to 0, its average() will always be 0.
@@ -172,7 +173,7 @@ class DiceMath:
             float: The average result of an infinite number of rolls
         """
         
-        dice = self._checkDice(dice)
+        dice = DiceMath._checkDice(dice)
         
         value = 0.0
         
@@ -180,7 +181,8 @@ class DiceMath:
             value = dice.count() * ( ( dice.sides() / 2.0 ) + 0.5 )
         return value
     
-    def max(self,dice):
+    @staticmethod
+    def max(dice):
         """Calculate the maximum possible value achievable when rolling the Dice.
         
         If either the sides or count of the Dice object are equal to 0, its max() will always be 0.
@@ -192,7 +194,7 @@ class DiceMath:
             int: The maximum value the Dice will take.
         """
         
-        dice = self._checkDice(dice)
+        dice = DiceMath._checkDice(dice)
         
         value = 0
         # If the Dice has no sides, will always be 0.
@@ -200,7 +202,8 @@ class DiceMath:
             value = dice.count() * dice.sides()
         return value
     
-    def min(self,dice):
+    @staticmethod
+    def min(dice):
         """Calculate the minimum possible value achievable when rolling the Dice.
         
         If either the sides or count of the Dice object are equal to 0, its min() will always be 0.
@@ -212,7 +215,7 @@ class DiceMath:
             int: The minimum value the Dice will take.
         """
         
-        dice = self._checkDice(dice)
+        dice = DiceMath._checkDice(dice)
         
         value = 0
         # If the Dice has no sides, will always be 0.
@@ -220,12 +223,13 @@ class DiceMath:
             value = dice.count()
         return value
     
-    def rollDropLow(self,dice: Dice,lowest=1):
+    @staticmethod
+    def rollDropLow(dice: Dice,lowest=1):
         """Rolls a provided dice object and provides the resultant values with a specified number of lowest values removed.
         
-        If lowest = 0, returns the result of rolling the Dice object once.
+        If `lowest = 0`, returns the result of rolling the Dice object.
         
-        If lowest >= dice.count(), it removes all values and returns an empty list.
+        If `lowest >= dice.count()`, it removes all values and returns an empty list.
 
         Args:
             dice (Dice): The Dice object to roll.
@@ -241,12 +245,12 @@ class DiceMath:
         # If trying to remove a negative number of dice, raise an error
         if (not isinstance(lowest,int) or lowest < 0):
             message = f"lowest must be 0 or a positive integer. Received value: {lowest} ({type(lowest)})"
-            self.__log.error(f"ValueError: {message}")
+            DiceMath.__log.error(f"ValueError: {message}")
             raise ValueError(f"{message}")
         
         
         # Verify if dice is a Dice
-        dice = self._checkDice(dice)
+        dice = DiceMath._checkDice(dice)
         
         # If removing more than the number of die in the Dice, return empty array
         if lowest >= dice.count():
